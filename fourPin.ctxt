@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=fourPin
+comment1.params=name\ func
+comment1.target=fourPin(java.lang.String,\ java.lang.String)
+comment2.params=ke
+comment2.target=void\ keyPressed(java.awt.event.KeyEvent)
+comment3.params=fb\ offset\ length\ text\ attrs
+comment3.target=void\ replace(javax.swing.text.DocumentFilter.FilterBypass,\ int,\ int,\ java.lang.String,\ javax.swing.text.AttributeSet)
+comment4.params=ae
+comment4.target=void\ actionPerformed(java.awt.event.ActionEvent)
+comment5.params=args
+comment5.target=void\ main(java.lang.String[])
+numComments=6

@@ -1,0 +1,159 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.text.*;
+ 
+public class CashT extends MFrame implements ActionListener
+{
+    JLabel tlab,elab,mlabel;
+    JLabel title = new JLabel("", JLabel.CENTER);
+    JTextField ctf=new JTextField();
+    int n=0,t=0,x=10000,a=0,balance;
+	String accno=""; 
+    JButton wbutt,dbutt,butt;
+    String func;
+	Database db;
+    CashT(String s,String func)
+     {
+         Color mcol=new Color(255,130,120);
+         Color rad=new Color(255,0,45);
+         this.func=func;
+         ret=1;
+		 try{
+			this.db=new Database();
+			accno=db.getAccno(s);
+			balance=db.getBalance(accno);
+		 }
+		 catch(Exception e)
+		 {
+			System.out.println(e);
+		 }
+		
+         setTitle("Account Owner - "+s);
+         setSize(500,500);
+         setSize(500,500);
+         setResizable(false);
+         setLayout(null);
+         getContentPane().setBackground(mcol);
+         setDefaultCloseOperation(MFrame.DO_NOTHING_ON_CLOSE);
+         
+         tlab=new JLabel("Enter Amount : ");
+         tlab.setBounds(100,100,200,30);
+         
+         ImageIcon im=new ImageIcon("bank.png");
+         setIconImage(im.getImage());
+         
+         title.setFont(new Font("Serif", Font.BOLD, 20));
+         title.setBounds(130,30,200,30);
+         
+         if(func=="withdraw")
+             Withdraw();
+         else
+             Deposit();
+         x=balance;
+         mlabel=new JLabel("Your current balance is : Rs."+balance);
+         mlabel.setBounds(100,160,300,30);
+         
+         elab=new JLabel("h");
+         elab.setBounds(100,280,300,30);
+         elab.setForeground(rad);
+         elab.setVisible(false);
+         
+		 butt=new JButton("HOME");
+		 butt.setBounds(370,400,100,30);
+		 butt.setFocusable(false);
+		 butt.setVisible(false);
+		butt.addActionListener(this);
+		 
+		 add(butt);
+         add(elab);
+         add(mlabel);
+         add(title);
+         add(tlab);
+         add(ctf);
+     }
+    public void Deposit()
+    {
+        title.setText("Cash Deposit Page");
+        ctf.setBounds(200,100,200,30);
+
+        dbutt=new JButton("CONFIRM");
+        dbutt.setBounds(100,240,300,30);
+        dbutt.setFocusable(false);
+        dbutt.addActionListener(this);
+         
+        add(dbutt);
+    }
+    public void Withdraw()
+    {
+        title.setText("Cash Withdrawal Page");
+        ctf.setBounds(200,100,200,30);
+        
+        wbutt=new JButton("CONFIRM");
+        wbutt.setBounds(100,240,300,30);
+        wbutt.setFocusable(false);
+        wbutt.addActionListener(this);
+         
+        add(wbutt);
+    }  
+    public void actionPerformed(ActionEvent ae)
+    {
+		if(ae.getSource()==butt)
+		{
+			dispose();
+			MainBank mb=new MainBank("SouthIndian Bank");
+		}
+		else
+		{
+        elab.setVisible(false);a=0;
+        try{
+            t=Integer.parseInt(ctf.getText());
+			if(t<1)
+				throw new Exception();
+        }
+        catch(Exception e)
+        {
+            elab.setText("Enter valid inputs only please!");
+            elab.setVisible(true);
+            a=1;
+        }                                                  
+        if(a==0)
+        {
+            int confirmed = JOptionPane.showConfirmDialog(null, "Are you sure you want to "+func+" Rs."+String.valueOf(t),
+                                                            "Transaction Confirmation Window", JOptionPane.YES_NO_OPTION);
+            if(confirmed==JOptionPane.YES_OPTION){
+            if(ae.getSource()==dbutt)
+            {
+                x+=t;
+                dbutt.setEnabled(false);
+				butt.setVisible(true);
+				elab.setText("Cash has been deposited succesfully!");
+				elab.setForeground(Color.black);
+				elab.setVisible(true);
+            }
+            else if(ae.getSource()==wbutt)
+            {
+                if(x>=t){
+                    x-=t;
+                    wbutt.setEnabled(false);
+					butt.setVisible(true);
+					elab.setText("Cash has been withdrawn succesfully!");
+					elab.setForeground(Color.black);
+					elab.setVisible(true);
+                }
+                else{
+                    elab.setText("Your account doesn't have that much cash! ");
+                    elab.setVisible(true);
+                }
+            }
+            mlabel.setText("Your current balance is : Rs."+x);
+			try{
+				this.db=new Database(accno,x);
+			}
+			catch(Exception e)
+			{}
+            }
+        }
+		}
+    }
+}

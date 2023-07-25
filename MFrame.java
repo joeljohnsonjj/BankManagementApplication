@@ -1,0 +1,47 @@
+ import javax.swing.*;
+import java.awt.event.*;
+public class MFrame extends JFrame
+{
+    public int c=0,cd=0,ret=0;
+    public MFrame()  
+    {      
+        addWindowListener(new WindowAdapter()
+        {
+          public void windowClosing(WindowEvent e) {
+              int confirmed;
+              if(cd==1)
+                  confirmed = JOptionPane.showConfirmDialog(null, "Are you sure you want to close all the pages?",
+                                                            "Confirmation Window", JOptionPane.YES_NO_OPTION);
+              else
+                  confirmed = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit the page?",
+                                                            "Confirmation Window", JOptionPane.YES_NO_OPTION);
+              if (confirmed == JOptionPane.YES_OPTION) 
+              {
+                c=1; 
+                System.exit(0);            
+              } 
+          }
+        });
+    }
+	public MFrame(String title)  
+    {      
+		super(title);
+        addWindowListener(new WindowAdapter()
+        {
+          public void windowClosing(WindowEvent e) {
+              int confirmed;
+              if(cd==1)
+                  confirmed = JOptionPane.showConfirmDialog(null, "Are you sure you want to close all the pages?",
+                                                            "Confirmation Window", JOptionPane.YES_NO_OPTION);
+              else
+                  confirmed = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit the page?",
+                                                            "Confirmation Window", JOptionPane.YES_NO_OPTION);
+              if (confirmed == JOptionPane.YES_OPTION) 
+              {
+                c=1; 
+                System.exit(0);            
+              } 
+          }
+        });
+    }
+}

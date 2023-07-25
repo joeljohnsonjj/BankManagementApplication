@@ -1,0 +1,142 @@
+import java.sql.*;
+public class Database
+{
+	String name[]= new String[100], pin[]=new String[100],pass[]=new String[100],no[]=new String[100];int bal[]=new int[100],i;
+	public Database()throws SQLException,ClassNotFoundException   //get values from table
+	{
+		i=0;
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jobank","root","1234");
+		Statement stm=con.createStatement();
+		String qry="SELECT *FROM user";
+		ResultSet rs=stm.executeQuery(qry);
+		while(rs.next())
+		{
+			no[i]=rs.getString(1);
+			name[i]=rs.getString(2);
+			pass[i]=rs.getString(3);
+			bal[i]=rs.getInt(4);
+			pin[i]=rs.getString(5);
+			i++;
+		}
+		rs.close();
+		stm.close();
+		con.close();
+	}
+	public Database(String accno,int rbalance)throws SQLException,ClassNotFoundException   //updates balance
+	{
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jobank","root","1234");
+		Statement st1=con.createStatement();
+		String qry="update user set accbalance="+String.valueOf(rbalance)+" where accno='"+accno+"'";
+		st1.executeUpdate(qry);
+		 
+		con.close();
+		st1.close();
+	}
+	public Database(String accno, String pin)throws SQLException,ClassNotFoundException   //updates PIN
+	{
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jobank","root","1234");
+		Statement st1=con.createStatement();
+		String qry="update user set accpin='"+pin+"' where accno='"+accno+"'";
+		st1.executeUpdate(qry);
+		
+		con.close();
+		st1.close();
+	}
+	String getPassword(String accno)
+	{
+		int j,conf=0;
+		for(j=0;j<i;j++)
+		{
+			if(no[j].equals(accno)){
+				conf=1;
+				break;
+			}
+		}
+		if(conf==0)
+			return "0";
+		else
+			return pass[j];
+	}
+	String getPin(String accno)
+	{
+		int j,conf=0;
+		for(j=0;j<i;j++)
+		{
+			if(no[j].equals(accno)){
+				conf=1;
+				break;
+			}
+		}
+		if(conf==0)
+			return "";
+		else
+			return pin[j];
+	}
+	int getBalance(String accno)
+	{
+		int j,conf=0;
+		for(j=0;j<i;j++)
+		{
+			if(no[j].equals(accno)){
+				conf=1;
+				break;
+			}
+		}
+		if(conf==0)
+			return -1;
+		else
+			return bal[j];
+	}
+	String getMax()
+	{
+		if(i!=0)
+			return no[i-1];
+		else 
+			return "000";
+	} 
+	String getAccno(String nam)
+	{
+		int j,conf=0;
+		nam=nam.trim();
+		for(j=0;j<i;j++)
+		{
+			if(name[j].equals(nam)){
+				conf=1;
+				break;
+			}
+		}
+		if(conf==0)
+			return "";
+		else
+			return no[j];
+	}
+	String getName(String accno)
+	{
+		int j,conf=0;
+		for(j=0;j<i;j++)
+		{
+			if(no[j].equals(accno)){
+				conf=1;
+				break;
+			}
+		}
+		if(conf==0)
+			return " ";
+		else
+			return name[j];
+	}
+	public static void main(String args[])//For testing purposes only
+	{
+		try{
+			Database pd=new  Database();
+			System.out.println(pd.getBalance("111")+" "+pd.getName("111"));
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+	}
+}
